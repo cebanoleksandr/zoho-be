@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeormConfig from './config/typeorm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { ApiKeysModule } from './api-keys/api-keys.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { ContactsModule } from './contacts/contacts.module';
@@ -41,11 +41,11 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     ActivitiesModule,
     CustomFieldsModule,
     WebhooksModule,
+    ApiKeysModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_INTERCEPTOR, useClass: TenantInterceptor },
   ],
 })

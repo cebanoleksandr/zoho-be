@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { RequireScope } from '../api-keys/decorators/require-scope.decorator';
 import { ConvertLeadDto } from './dto/convert-lead.dto';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { QueryLeadsDto } from './dto/query-leads.dto';
@@ -20,16 +21,19 @@ import { LeadsService } from './leads.service';
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
+  @RequireScope('leads:write')
   @Post()
   create(@Body() dto: CreateLeadDto) {
     return this.leadsService.create(dto);
   }
 
+  @RequireScope('leads:read')
   @Get()
   findAll(@Query() query: QueryLeadsDto) {
     return this.leadsService.findAll(query);
   }
 
+  @RequireScope('leads:read')
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.leadsService.findOne(id);
