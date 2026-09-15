@@ -9,7 +9,9 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AccountsModule } from './accounts/accounts.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { DealsModule } from './deals/deals.module';
 import { LeadsModule } from './leads/leads.module';
+import { PipelinesModule } from './pipelines/pipelines.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
 import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
@@ -31,6 +33,8 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     LeadsModule,
     AccountsModule,
     ContactsModule,
+    PipelinesModule,
+    DealsModule,
   ],
   controllers: [AppController],
   providers: [

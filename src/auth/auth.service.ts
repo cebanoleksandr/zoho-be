@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { Organization } from '../organizations/entities/organization.entity';
+import { PipelinesService } from '../pipelines/pipelines.service';
 import { UserRole } from '../users/entities/user-role.enum';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -31,6 +32,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly pipelinesService: PipelinesService,
   ) {}
 
   async register(
@@ -47,6 +49,7 @@ export class AuthService {
     const organization = await this.organizationsRepository.save(
       this.organizationsRepository.create({ name: dto.organizationName, slug }),
     );
+    await this.pipelinesService.createDefaultPipeline(organization.id);
 
     const passwordHash = await bcrypt.hash(dto.password, SALT_ROUNDS);
     const user = await this.usersService.create({
