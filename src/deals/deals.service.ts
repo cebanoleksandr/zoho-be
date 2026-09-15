@@ -9,6 +9,8 @@ import { Account } from '../accounts/entities/account.entity';
 import { TenantContext } from '../common/tenancy/tenant-context';
 import { Contact } from '../contacts/entities/contact.entity';
 import { PipelinesService } from '../pipelines/pipelines.service';
+import { WebhookEvent } from '../webhooks/entities/webhook-event.enum';
+import { WebhooksService } from '../webhooks/webhooks.service';
 import { CreateDealDto } from './dto/create-deal.dto';
 import { QueryDealsDto } from './dto/query-deals.dto';
 import { UpdateDealDto } from './dto/update-deal.dto';
@@ -24,6 +26,7 @@ export class DealsService {
     @InjectRepository(Contact)
     private readonly contactsRepository: Repository<Contact>,
     private readonly pipelinesService: PipelinesService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
   async create(dto: CreateDealDto): Promise<Deal> {
@@ -65,7 +68,13 @@ export class DealsService {
       stageId: stage.id,
       closedAt: stage.isWon || stage.isLost ? new Date() : null,
     });
-    return this.dealsRepository.save(deal);
+    const saved = await this.dealsRepository.save(deal);
+
+    this.webhooksService
+      .dispatch(organizationId, WebhookEvent.DEAL_CREATED, { deal: saved })
+      .catch(() => undefined);
+
+    return saved;
   }
 
   async findAll(
@@ -134,9 +143,19 @@ export class DealsService {
       throw new BadRequestException('Stage does not belong to this pipeline');
     }
 
+    const previousStageId = deal.stageId;
     deal.stageId = stage.id;
     deal.closedAt = stage.isWon || stage.isLost ? new Date() : null;
-    return this.dealsRepository.save(deal);
+    const saved = await this.dealsRepository.save(deal);
+
+    this.webhooksService
+      .dispatch(deal.organizationId, WebhookEvent.DEAL_STAGE_CHANGED, {
+        deal: saved,
+        previousStageId,
+      })
+      .catch(() => undefined);
+
+    return saved;
   }
 
   async remove(id: string): Promise<void> {

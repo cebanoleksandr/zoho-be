@@ -10,11 +10,13 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AccountsModule } from './accounts/accounts.module';
 import { ActivitiesModule } from './activities/activities.module';
 import { ContactsModule } from './contacts/contacts.module';
+import { CustomFieldsModule } from './custom-fields/custom-fields.module';
 import { DealsModule } from './deals/deals.module';
 import { LeadsModule } from './leads/leads.module';
 import { PipelinesModule } from './pipelines/pipelines.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
 
 @Module({
@@ -37,6 +39,8 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     PipelinesModule,
     DealsModule,
     ActivitiesModule,
+    CustomFieldsModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [

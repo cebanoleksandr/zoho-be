@@ -1,13 +1,13 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, IsUUID, Max, Min } from 'class-validator';
-import { ActivityEntityType } from '../entities/activity-entity-type.enum';
+import { CrmEntityType } from '../../common/enums/crm-entity-type.enum';
 import { ActivityStatus } from '../entities/activity-status.enum';
 import { ActivityType } from '../entities/activity-type.enum';
 
 export class QueryActivitiesDto {
   @IsOptional()
-  @IsEnum(ActivityEntityType)
-  entityType?: ActivityEntityType;
+  @IsEnum(CrmEntityType)
+  entityType?: CrmEntityType;
 
   @IsOptional()
   @IsUUID()

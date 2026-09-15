@@ -5,12 +5,12 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { ActivityEntityType } from '../entities/activity-entity-type.enum';
+import { CrmEntityType } from '../../common/enums/crm-entity-type.enum';
 import { ActivityType } from '../entities/activity-type.enum';
 
 export class CreateActivityDto {
-  @IsEnum(ActivityEntityType)
-  entityType: ActivityEntityType;
+  @IsEnum(CrmEntityType)
+  entityType: CrmEntityType;
 
   @IsUUID()
   entityId: string;

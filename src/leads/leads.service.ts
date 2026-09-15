@@ -10,6 +10,8 @@ import { TenantContext } from '../common/tenancy/tenant-context';
 import { Contact } from '../contacts/entities/contact.entity';
 import { Deal } from '../deals/entities/deal.entity';
 import { PipelinesService } from '../pipelines/pipelines.service';
+import { WebhookEvent } from '../webhooks/entities/webhook-event.enum';
+import { WebhooksService } from '../webhooks/webhooks.service';
 import { ConvertLeadDto } from './dto/convert-lead.dto';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { QueryLeadsDto } from './dto/query-leads.dto';
@@ -29,14 +31,19 @@ export class LeadsService {
     @InjectRepository(Deal)
     private readonly dealsRepository: Repository<Deal>,
     private readonly pipelinesService: PipelinesService,
+    private readonly webhooksService: WebhooksService,
   ) {}
 
-  create(dto: CreateLeadDto): Promise<Lead> {
-    const lead = this.leadsRepository.create({
-      ...dto,
-      organizationId: TenantContext.getOrganizationId(),
-    });
-    return this.leadsRepository.save(lead);
+  async create(dto: CreateLeadDto): Promise<Lead> {
+    const organizationId = TenantContext.getOrganizationId();
+    const lead = this.leadsRepository.create({ ...dto, organizationId });
+    const saved = await this.leadsRepository.save(lead);
+
+    this.webhooksService
+      .dispatch(organizationId, WebhookEvent.LEAD_CREATED, { lead: saved })
+      .catch(() => undefined);
+
+    return saved;
   }
 
   async findAll(
@@ -177,6 +184,16 @@ export class LeadsService {
       const savedLead = await manager.save(Lead, lead);
 
       return { lead: savedLead, account, contact, deal };
+    }).then((result) => {
+      this.webhooksService
+        .dispatch(organizationId, WebhookEvent.LEAD_CONVERTED, {
+          leadId: result.lead.id,
+          accountId: result.account.id,
+          contactId: result.contact.id,
+          dealId: result.deal?.id ?? null,
+        })
+        .catch(() => undefined);
+      return result;
     });
   }
 

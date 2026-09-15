@@ -1,14 +1,14 @@
 import { Column, Entity, Index } from 'typeorm';
 import { TenantBaseEntity } from '../../common/entities/tenant-base.entity';
-import { ActivityEntityType } from './activity-entity-type.enum';
+import { CrmEntityType } from '../../common/enums/crm-entity-type.enum';
 import { ActivityStatus } from './activity-status.enum';
 import { ActivityType } from './activity-type.enum';
 
 @Entity('activities')
 @Index(['organizationId', 'entityType', 'entityId'])
 export class Activity extends TenantBaseEntity {
-  @Column({ name: 'entity_type', type: 'enum', enum: ActivityEntityType })
-  entityType: ActivityEntityType;
+  @Column({ name: 'entity_type', type: 'enum', enum: CrmEntityType })
+  entityType: CrmEntityType;
 
   @Column({ name: 'entity_id', type: 'uuid' })
   entityId: string;

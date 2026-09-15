@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AccountsModule } from '../accounts/accounts.module';
 import { ContactsModule } from '../contacts/contacts.module';
 import { PipelinesModule } from '../pipelines/pipelines.module';
+import { WebhooksModule } from '../webhooks/webhooks.module';
 import { DealsController } from './deals.controller';
 import { DealsService } from './deals.service';
 import { Deal } from './entities/deal.entity';
@@ -13,6 +14,7 @@ import { Deal } from './entities/deal.entity';
     AccountsModule,
     ContactsModule,
     PipelinesModule,
+    WebhooksModule,
   ],
   controllers: [DealsController],
   providers: [DealsService],

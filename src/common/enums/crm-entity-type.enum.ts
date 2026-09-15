@@ -1,4 +1,4 @@
-export enum ActivityEntityType {
+export enum CrmEntityType {
   LEAD = 'lead',
   CONTACT = 'contact',
   ACCOUNT = 'account',

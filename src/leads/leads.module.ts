@@ -4,6 +4,7 @@ import { Account } from '../accounts/entities/account.entity';
 import { Contact } from '../contacts/entities/contact.entity';
 import { Deal } from '../deals/entities/deal.entity';
 import { PipelinesModule } from '../pipelines/pipelines.module';
+import { WebhooksModule } from '../webhooks/webhooks.module';
 import { Lead } from './entities/lead.entity';
 import { LeadsController } from './leads.controller';
 import { LeadsService } from './leads.service';
@@ -12,6 +13,7 @@ import { LeadsService } from './leads.service';
   imports: [
     TypeOrmModule.forFeature([Lead, Account, Contact, Deal]),
     PipelinesModule,
+    WebhooksModule,
   ],
   controllers: [LeadsController],
   providers: [LeadsService],
