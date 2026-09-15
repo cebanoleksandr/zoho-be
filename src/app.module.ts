@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AccountsModule } from './accounts/accounts.module';
+import { ContactsModule } from './contacts/contacts.module';
 import { LeadsModule } from './leads/leads.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
@@ -29,6 +30,7 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     AuthModule,
     LeadsModule,
     AccountsModule,
+    ContactsModule,
   ],
   controllers: [AppController],
   providers: [
