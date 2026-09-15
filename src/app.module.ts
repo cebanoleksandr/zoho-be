@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AccountsModule } from './accounts/accounts.module';
+import { ActivitiesModule } from './activities/activities.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { DealsModule } from './deals/deals.module';
 import { LeadsModule } from './leads/leads.module';
@@ -35,6 +36,7 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     ContactsModule,
     PipelinesModule,
     DealsModule,
+    ActivitiesModule,
   ],
   controllers: [AppController],
   providers: [
