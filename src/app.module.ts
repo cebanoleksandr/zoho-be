@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AccountsModule } from './accounts/accounts.module';
 import { LeadsModule } from './leads/leads.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { UsersModule } from './users/users.module';
@@ -27,6 +28,7 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     UsersModule,
     AuthModule,
     LeadsModule,
+    AccountsModule,
   ],
   controllers: [AppController],
   providers: [
