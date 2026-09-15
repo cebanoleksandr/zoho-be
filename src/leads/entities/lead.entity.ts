@@ -39,4 +39,13 @@ export class Lead extends TenantBaseEntity {
 
   @Column({ name: 'converted_at', type: 'timestamptz', nullable: true })
   convertedAt: Date | null;
+
+  @Column({ name: 'converted_account_id', type: 'uuid', nullable: true })
+  convertedAccountId: string | null;
+
+  @Column({ name: 'converted_contact_id', type: 'uuid', nullable: true })
+  convertedContactId: string | null;
+
+  @Column({ name: 'converted_deal_id', type: 'uuid', nullable: true })
+  convertedDealId: string | null;
 }

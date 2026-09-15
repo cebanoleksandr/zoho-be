@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ConvertLeadDto } from './dto/convert-lead.dto';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { QueryLeadsDto } from './dto/query-leads.dto';
 import { UpdateLeadStatusDto } from './dto/update-lead-status.dto';
@@ -53,5 +54,13 @@ export class LeadsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.leadsService.remove(id);
+  }
+
+  @Post(':id/convert')
+  convert(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: ConvertLeadDto,
+  ) {
+    return this.leadsService.convert(id, dto);
   }
 }
