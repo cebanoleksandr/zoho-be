@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TenantContext } from '../common/tenancy/tenant-context';
 import { User } from './entities/user.entity';
+
+type SafeUser = Omit<User, 'passwordHash' | 'refreshTokenHash'>;
 
 @Injectable()
 export class UsersService {
@@ -9,6 +12,24 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
+
+  async findAll(): Promise<SafeUser[]> {
+    const users = await this.usersRepository.find({
+      where: { organizationId: TenantContext.getOrganizationId() },
+      order: { firstName: 'ASC' },
+    });
+    return users.map((user) => this.sanitize(user));
+  }
+
+  async findOneInCurrentOrg(id: string): Promise<SafeUser> {
+    const user = await this.usersRepository.findOne({
+      where: { id, organizationId: TenantContext.getOrganizationId() },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return this.sanitize(user);
+  }
 
   findByEmailInOrganization(
     organizationId: string,
@@ -40,5 +61,10 @@ export class UsersService {
     refreshTokenHash: string | null,
   ): Promise<void> {
     await this.usersRepository.update({ id }, { refreshTokenHash });
+  }
+
+  private sanitize(user: User): SafeUser {
+    const { passwordHash, refreshTokenHash, ...rest } = user;
+    return rest;
   }
 }
