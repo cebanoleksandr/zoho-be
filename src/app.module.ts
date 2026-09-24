@@ -27,8 +27,14 @@ import { TenantInterceptor } from './common/tenancy/tenant.interceptor';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) =>
-        configService.get('database'),
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        ssl: { rejectUnauthorized: false },
+        autoLoadEntities: true,
+        synchronize: false,
+        logging: false,
+      }),
     }),
     OrganizationsModule,
     UsersModule,
